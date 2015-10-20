@@ -50,7 +50,6 @@ Here are some of the documents from Apple that informed the style guide. If some
 * [Golden Path](#golden-path)
 * [Error handling](#error-handling)
 * [Singletons](#singletons)
-* [Line Breaks](#line-breaks)
 * [Smiley Face](#smiley-face)
 * [Xcode Project](#xcode-project)
 
@@ -116,7 +115,7 @@ Use `#pragma mark -` to categorize methods in functional groupings and protocol/
 
 ## Spacing
 
-* Indent using 2 spaces (this conserves space in print and makes line wrapping less likely). Never indent with tabs. Be sure to set this preference in Xcode.
+* Indent using 4 spaces (this conserves space in print and makes line wrapping less likely). Never indent with tabs. Be sure to set this preference in Xcode.
 * Method braces and other braces (`if`/`else`/`switch`/`while` etc.) always open on the same line as the statement but close on a new line.
 
 **Preferred:**
@@ -225,7 +224,7 @@ id varnm;
 
 When using properties, instance variables should always be accessed and mutated using `self.`. This means that all properties will be visually distinct, as they will all be prefaced with `self.`. 
 
-An exception to this: inside initializers and `dealloc`, the backing instance variable (i.e. _variableName) should be used directly to avoid any potential side effects of the getters/setters.
+An exception to this: inside initializers and `dealloc`, custom accessors and `description`; the backing instance variable (i.e. _variableName) should be used directly to avoid any potential side effects of the getters/setters.
 
 Local variables should not contain underscores.
 
@@ -261,7 +260,7 @@ Asterisks indicating pointers belong with the variable, e.g., `NSString *text` n
 
 [Private properties](#private-properties) should be used in place of instance variables whenever possible. Although using instance variables is a valid way of doing things, by agreeing to prefer properties our code will be more consistent. 
 
-Direct access to instance variables that 'back' properties should be avoided except in initializer methods (`init`, `initWithCoder:`, etc…), `dealloc` methods and within custom setters and getters. For more information on using Accessor Methods in Initializer Methods and dealloc, see [here](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/TP40004447-SW6).
+Direct access to instance variables that 'back' properties should be avoided except in initializer methods (`init`, `initWithCoder:`, etc…), `dealloc` methods, within custom setters and getters and inside the `description` method. For more information on using Accessor Methods in Initializer Methods and dealloc, see [here](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/TP40004447-SW6).
 
 **Preferred:**
 
@@ -319,7 +318,6 @@ Why? Even if you declared a property as `NSString` somebody might pass in an ins
 
 Properties that are `strong` or `assign` will be automatically inferred because they are the defaults, so they do not need to be specified.
 
-
 **Preferred**
 ```objc
 @property (nonatomic) UIView *view;
@@ -352,6 +350,14 @@ NSInteger arrayCount = self.array.count;
 [view setBackgroundColor:[UIColor orangeColor]];
 UIApplication.sharedApplication.delegate;
 ```
+
+## Nullability
+
+Nullability should always be used in header files, it's preferred in implementation files. The easiest way to do this is to always wrap the code in `NS_ASSUME_NOTNULL_BEGIN` and `NS_ASSUME_NOTNULL_END` macros. Always prefer the nicer looking `nullable` instead of the ugly `_Nullable`, unless you have no choice (i.e. defining a block).
+
+## Generics
+
+Generics should be adopted wherever possible in header files - this helps document the code. It's optional in implementation files, though I've found it useful.
 
 ## Literals
 
