@@ -1,6 +1,7 @@
-# The official raywenderlich.com Objective-C style guide.
+# net-a-porter Objective-C style guide
+### (fork from The official raywenderlich.com Objective-C style guide)
 
-This style guide outlines the coding conventions for raywenderlich.com.
+This style guide outlines the coding conventions for net-a-porter.com.
 
 ## Introduction
 
@@ -190,7 +191,7 @@ UIButton *settingsButton;
 UIButton *setBut;
 ```
 
-A three letter prefix should always be used for class names and constants, however may be omitted for Core Data entity names. For any official raywenderlich.com books, starter kits, or tutorials, the prefix 'RWT' should be used.
+A three letter prefix should always be used for class names and constants, however may be omitted for Core Data entity names.
 
 Constants should be camel-case with all words capitalized and prefixed by the related class name for clarity.
 
@@ -211,7 +212,7 @@ Properties should be camel-case with the leading word being lowercase. Use auto-
 **Preferred:**
 
 ```objc
-@property (strong, nonatomic) NSString *descriptiveVariableName;
+@property (copy, nonatomic) NSString *descriptiveVariableName;
 ```
 
 **Not Preferred:**
@@ -224,7 +225,7 @@ id varnm;
 
 When using properties, instance variables should always be accessed and mutated using `self.`. This means that all properties will be visually distinct, as they will all be prefaced with `self.`. 
 
-An exception to this: inside initializers, the backing instance variable (i.e. _variableName) should be used directly to avoid any potential side effects of the getters/setters.
+An exception to this: inside initializers and `dealloc`, the backing instance variable (i.e. _variableName) should be used directly to avoid any potential side effects of the getters/setters.
 
 Local variables should not contain underscores.
 
@@ -267,7 +268,7 @@ Direct access to instance variables that 'back' properties should be avoided exc
 ```objc
 @interface RWTTutorial : NSObject
 
-@property (strong, nonatomic) NSString *tutorialName;
+@property (copy, nonatomic) NSString *tutorialName;
 
 @end
 ```
@@ -299,7 +300,7 @@ Property attributes should be explicitly listed, and will help new programmers w
 @property (nonatomic) NSString *tutorialName;
 ```
 
-Properties with mutable counterparts (e.g. NSString) should prefer `copy` instead of `strong`. 
+Properties with mutable subclasses (e.g. NSString) should prefer `copy` instead of `strong`. 
 Why? Even if you declared a property as `NSString` somebody might pass in an instance of an `NSMutableString` and then change it without you noticing that.  
 
 **Preferred:**
@@ -312,6 +313,24 @@ Why? Even if you declared a property as `NSString` somebody might pass in an ins
 
 ```objc
 @property (strong, nonatomic) NSString *tutorialName;
+```
+
+## Default storage specifiers
+
+Properties that are `strong` or `assign` will be automatically inferred because they are the defaults, so they do not need to be specified.
+
+
+**Preferred**
+```objc
+@property (nonatomic) UIView *view;
+@proprety (nonatomic, copy) NSString *string;
+@property (nonatomic) double primitiveValue;
+```
+
+**Not Preferred**
+```objc
+@property (nonatomic, strong) UIView *view;
+@property (nonatomic, assign) double primitiveValue;
 ```
 
 ## Dot-Notation Syntax
@@ -454,7 +473,7 @@ switch (condition) {
 
 ```
 
-When using an enumerated type for a switch, 'default' is not needed.   For example:
+When using an enumerated type for a switch, 'default' is not not recommended - it's nice for the compiler to tell you if the enumeration changes and where you need to deal with that change.   For example:
 
 ```objc
 RWTLeftMenuTopItemType menuType = RWTLeftMenuTopItemMain;
@@ -547,6 +566,8 @@ The Ternary operator, `?:` , should only be used when it increases clarity or co
 
 Non-boolean variables should be compared against something, and parentheses are added for improved readability.  If the variable being compared is a boolean type, then no parentheses are needed.
 
+It can also be used for default values.
+
 **Preferred:**
 ```objc
 NSInteger value = 5;
@@ -554,6 +575,8 @@ result = (value != 0) ? x : y;
 
 BOOL isHorizontal = YES;
 result = isHorizontal ? x : y;
+
+definitelySet = someValue ?: aDefaultValue;
 ```
 
 **Not Preferred:**
@@ -567,8 +590,7 @@ Init methods should follow the convention provided by Apple's generated code tem
 
 ```objc
 - (instancetype)init {
-  self = [super init];
-  if (self) {
+  if ((self = [super init])) {
     // ...
   }
   return self;
@@ -687,21 +709,6 @@ Singleton objects should use a thread-safe pattern for creating their shared ins
 This will prevent [possible and sometimes prolific crashes](http://cocoasamurai.blogspot.com/2011/04/singletons-your-doing-them-wrong.html).
 
 
-## Line Breaks
-
-Line breaks are an important topic since this style guide is focused for print and online readability.
-
-For example:
-```objc
-self.productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdentifiers];
-```
-A long line of code like this should be carried on to the second line adhering to this style guide's Spacing section (two spaces).
-```objc
-self.productsRequest = [[SKProductsRequest alloc] 
-  initWithProductIdentifiers:productIdentifiers];
-```
-
-
 ## Smiley Face
 
 Smiley faces are a very prominent style feature of the raywenderlich.com site!  It is very important to have the correct smile signifying the immense amount of happiness and excitement for the coding topic.  The end square bracket is used because it represents the largest smile able to be captured using ascii art.  A half-hearted smile is represented if an end parenthesis is used, and thus not preferred.
@@ -721,7 +728,7 @@ Smiley faces are a very prominent style feature of the raywenderlich.com site!  
 
 The physical files should be kept in sync with the Xcode project files in order to avoid file sprawl. Any Xcode groups created should be reflected by folders in the filesystem. Code should be grouped not only by type, but also by feature for greater clarity.
 
-When possible, always turn on "Treat Warnings as Errors" in the target's Build Settings and enable as many [additional warnings](http://boredzo.org/blog/archives/2009-11-07/warnings) as possible. If you need to ignore a specific warning, use [Clang's pragma feature](http://clang.llvm.org/docs/UsersManual.html#controlling-diagnostics-via-pragmas).
+Always turn on "Treat Warnings as Errors" in the target's Build Settings and enable as many [additional warnings](http://boredzo.org/blog/archives/2009-11-07/warnings) as possible. If you need to ignore a specific warning, use [Clang's pragma feature](http://clang.llvm.org/docs/UsersManual.html#controlling-diagnostics-via-pragmas).
 
 # Other Objective-C Style Guides
 
