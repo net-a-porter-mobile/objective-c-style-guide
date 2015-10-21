@@ -267,7 +267,7 @@ Direct access to instance variables that 'back' properties should be avoided exc
 ```objc
 @interface RWTTutorial : NSObject
 
-@property (copy, nonatomic) NSString *tutorialName;
+@property (nonatomic, copy) NSString *tutorialName;
 
 @end
 ```
@@ -305,13 +305,13 @@ Why? Even if you declared a property as `NSString` somebody might pass in an ins
 **Preferred:**
 
 ```objc
-@property (copy, nonatomic) NSString *tutorialName;
+@property (nonatomic, copy) NSString *tutorialName;
 ```
 
 **Not Preferred:**
 
 ```objc
-@property (strong, nonatomic) NSString *tutorialName;
+@property (nonatomic, strong) NSString *tutorialName;
 ```
 
 ## Default storage specifiers
