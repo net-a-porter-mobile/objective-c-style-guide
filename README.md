@@ -359,6 +359,27 @@ Nullability should always be used in header files, it's preferred in implementat
 
 Generics should be adopted wherever possible in header files - this helps document the code. It's optional in implementation files, though I've found it useful.
 
+When dealing with nested arrays, sets and dictionaries. Generics should look neat and be easily readable, therefore it is not recommended to go beyond displaying generics for the first level when arrays are nested within arrays etc.
+
+**Preferred:**
+
+```objc
+- (void)displayMyArray:(NSArray<NSSet *> *)myArray;
+- (void)displayMyDictionary:(NSDictionary<NSString *, NSArray *> *)myDictionary;
+- (void)displayMySet:(NSSet<NSArray <NSDictionary *> *> *)mySet;
+
+```
+
+**Not Preferred:**
+
+```objc
+- (void)displayMyArray:(NSArray<NSSet<NSDictionary *> *> *)myArray;
+- (void)displayMyDictionary:(NSDictionary<NSString *, NSArray <NSString *> *> *)myDictionary;
+- (void)displayMySet:(NSSet<NSArray <NSSet *> *> *)mySet;
+
+```
+
+
 ## Literals
 
 `NSString`, `NSDictionary`, `NSArray`, and `NSNumber` literals should be used whenever creating immutable instances of those objects. Pay special care that `nil` values can not be passed into `NSArray` and `NSDictionary` literals, as this will cause a crash.
