@@ -366,7 +366,7 @@ When dealing with nested arrays, sets and dictionaries. Generics should look nea
 ```objc
 - (void)displayMyArray:(NSArray<NSSet *> *)myArray;
 - (void)displayMyDictionary:(NSDictionary<NSString *, NSArray *> *)myDictionary;
-- (void)displayMySet:(NSSet<NSArray <NSDictionary *> *> *)mySet;
+- (void)displayMySet:(NSSet<NSArray *> *)mySet;
 
 ```
 
