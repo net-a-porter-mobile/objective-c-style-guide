@@ -502,7 +502,7 @@ switch (condition) {
 
 ```
 
-When using an enumerated type for a switch, 'default' is not not recommended - it's nice for the compiler to tell you if the enumeration changes and where you need to deal with that change.   For example:
+When using an enumerated type for a switch, 'default' is not recommended - it's nice for the compiler to tell you if the enumeration changes and where you need to deal with that change.   For example:
 
 ```objc
 RWTLeftMenuTopItemType menuType = RWTLeftMenuTopItemMain;
