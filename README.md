@@ -50,7 +50,6 @@ Here are some of the documents from Apple that informed the style guide. If some
 * [Golden Path](#golden-path)
 * [Error handling](#error-handling)
 * [Singletons](#singletons)
-* [Smiley Face](#smiley-face)
 * [Xcode Project](#xcode-project)
 
 
@@ -283,20 +282,22 @@ Direct access to instance variables that 'back' properties should be avoided exc
 
 ## Property Attributes
 
-Property attributes should be explicitly listed, and will help new programmers when reading the code.  The order of properties should be storage then atomicity, which is consistent with automatically generated code when connecting UI elements from Interface Builder.
+Property attributes should be explicitly listed unless they are the default value.  The order of properties should be atomicity then storage.
 
 **Preferred:**
 
 ```objc
-@property (weak, nonatomic) IBOutlet UIView *containerView;
-@property (strong, nonatomic) NSString *tutorialName;
+@property (nonatomic, weak) IBOutlet UIView *containerView;
+@property (nonatomic, copy) NSString *tutorialName;
+@property (nonatomic) NSURL *baseURL;
 ```
 
 **Not Preferred:**
 
 ```objc
-@property (nonatomic, weak) IBOutlet UIView *containerView;
-@property (nonatomic) NSString *tutorialName;
+@property (weak, nonatomic) IBOutlet UIView *containerView;
+@property (copy, nonatomic) NSString *tutorialName;
+@property (nonatomic, strong) NSURL *baseURL;
 ```
 
 Properties with mutable subclasses (e.g. NSString) should prefer `copy` instead of `strong`. 
@@ -339,14 +340,14 @@ Dot-notation should **always** be used for accessing and mutating properties, as
 
 **Preferred:**
 ```objc
-NSInteger arrayCount = [self.array count];
+NSInteger arrayCount = self.array.count;
 view.backgroundColor = [UIColor orangeColor];
 [UIApplication sharedApplication].delegate;
 ```
 
 **Not Preferred:**
 ```objc
-NSInteger arrayCount = self.array.count;
+NSInteger arrayCount = [self.array count];
 [view setBackgroundColor:[UIColor orangeColor]];
 UIApplication.sharedApplication.delegate;
 ```
@@ -500,7 +501,7 @@ switch (condition) {
 
 ```
 
-When using an enumerated type for a switch, 'default' is not not recommended - it's nice for the compiler to tell you if the enumeration changes and where you need to deal with that change.   For example:
+When using an enumerated type for a switch, 'default' is not recommended - it's nice for the compiler to tell you if the enumeration changes and where you need to deal with that change.   For example:
 
 ```objc
 RWTLeftMenuTopItemType menuType = RWTLeftMenuTopItemMain;
@@ -735,25 +736,9 @@ Singleton objects should use a thread-safe pattern for creating their shared ins
 ```
 This will prevent [possible and sometimes prolific crashes](http://cocoasamurai.blogspot.com/2011/04/singletons-your-doing-them-wrong.html).
 
-
-## Smiley Face
-
-Smiley faces are a very prominent style feature of the raywenderlich.com site!  It is very important to have the correct smile signifying the immense amount of happiness and excitement for the coding topic.  The end square bracket is used because it represents the largest smile able to be captured using ascii art.  A half-hearted smile is represented if an end parenthesis is used, and thus not preferred.
-
-**Preferred:**
-```objc
-:]
-```
-
-**Not Preferred:**
-```objc
-:)
-```  
-
-
 ## Xcode project
 
-The physical files should be kept in sync with the Xcode project files in order to avoid file sprawl. Any Xcode groups created should be reflected by folders in the filesystem. Code should be grouped not only by type, but also by feature for greater clarity.
+The physical files should be kept in sync with the Xcode project files in order to avoid file sprawl. Any Xcode groups created must be reflected by folders in the filesystem. Code should be grouped not only by type, but also by feature for greater clarity.
 
 Always turn on "Treat Warnings as Errors" in the target's Build Settings and enable as many [additional warnings](http://boredzo.org/blog/archives/2009-11-07/warnings) as possible. If you need to ignore a specific warning, use [Clang's pragma feature](http://clang.llvm.org/docs/UsersManual.html#controlling-diagnostics-via-pragmas).
 
