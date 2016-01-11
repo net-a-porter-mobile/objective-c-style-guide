@@ -356,6 +356,37 @@ UIApplication.sharedApplication.delegate;
 
 Nullability should always be used in header files, it's preferred in implementation files. The easiest way to do this is to always wrap the code in `NS_ASSUME_NOTNULL_BEGIN` and `NS_ASSUME_NOTNULL_END` macros. Always prefer the nicer looking `nullable` instead of the ugly `_Nullable`, unless you have no choice (i.e. defining a block).
 
+Nullability should be applied outside class definitions - it should never be applied to _part_ of a class.
+
+**Preferred**
+```objc
+NS_ASSUME_NONNULL_BEGIN
+
+@interface MyClass : NSObject
+
+- (id)method1WithThingy:(nullable id thingy);
+- (id)method2WithThingy:(nullable id thingy);
+
+@end
+
+NS_ASSUME_NONNULL_END
+```
+
+**Not Preferred**
+```objc
+@interface MyClass : NSObject
+
+NS_ASSUME_NONNULL_BEGIN
+
+- (id)method1WithThingy:(nullable id thingy);
+
+NS_ASSUME_NONNULL_END
+
+- (id)method2WithThingy:(nullable id thingy);
+
+@end
+```
+
 ## Generics
 
 Generics should be adopted wherever possible in header files - this helps document the code. It's optional in implementation files, though I've found it useful.
